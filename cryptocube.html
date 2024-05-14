@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <div class="preview" id="marked-mathjax-preview-buffer" style="top: 0px; left: 0px;">
+    <h3 id="research-overview">Research Overview</h3>
+    <p>I’m conducting research on an algorithm utilizing a NxNxN 3D data structure akin to a Rubik’s cube. This structure uses data bits (0s and 1s) instead of colors on its faces. The goal is to maximize the information encoded on the six faces with minimal twisting movements.</p>
+
+    <h3 id="key-points">Key Points</h3>
+    <ol>
+      <li><strong>Data Structure</strong>: The NxNxN cube has six faces, each with NxN slots, totaling NxNx6 data slots. Not all slots are usable due to symmetry and fixed positions.</li>
+      <li><strong>Compact Twisting Movements</strong>: We need a compact descriptor for twisting movements that requires less data than the information it encrypts.</li>
+    </ol>
+
+    <h3 id="detailed-analysis">Detailed Analysis</h3>
+    <h4 id="usable-data-slots-calculation">Usable Data Slots Calculation</h4>
+    <ul>
+      <li><strong>Total Data Slots (ds)</strong>: Each of the six faces has \(N \times N\) slots.</li>
+      <li><strong>Example Calculation (N = 4)</strong>:
+        <ul>
+          <li>Total slots: \(6 \times 16 = 96\) ds.</li>
+          <li>Usable slots (Z): Some slots are fixed due to symmetry. For instance, center and corner slots may be fixed by symmetry.</li>
+          <li>Usable variable ds: \(Z = 42\) (assuming 54 fixed bits based on a specific encoding scheme).</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h4 id="twisting-movement-descriptor-t-">Twisting Movement Descriptor (T)</h4>
+    <ul>
+      <li><strong>Generic Descriptor for N ranging from 3 to 7</strong>:
+        <ul>
+          <li>Use 3 bits to address rows and columns (0 to 7):
+            <ul>
+              <li>Values 0-3: Outer slices</li>
+              <li>Values 4-7: Inner slices</li>
+              <li>Value 0: No rotation</li>
+              <li>Value 7: Two-layer rotation</li>
+            </ul>
+          </li>
+          <li>Use another 2 bits for rotation direction:
+            <ul>
+              <li><code>00</code>: No rotation</li>
+              <li><code>01</code>: Clockwise</li>
+              <li><code>10</code>: Counterclockwise</li>
+              <li><code>11</code>: Half-turn</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Total bits per move (T): 6 bits.</li>
+    </ul>
+
+    <h4 id="solving-initial-configuration-i-">Solving Initial Configuration (I)</h4>
+    <ul>
+      <li><strong>Example Calculation for N = 4</strong>:
+        <ul>
+          <li><strong>Corners</strong>: \((2^8) \times 8!\) possibilities.</li>
+          <li><strong>Edges</strong>: \((2^{24}) \times 24!\) possibilities.</li>
+          <li><strong>Centers</strong>: \(2^{24}\) possibilities.</li>
+          <li>Total possibilities (I):
+            \[
+            \frac{(2^8) \times 8! \times (2^{24}) \times 24! \times (2^{24})}{24}
+            \]
+          </li>
+          <li>Logarithm base 2:
+            \[
+            \log_2 \left( \frac{(2^8) \times 8! \times (2^{24}) \times 24! \times (2^{24})}{24} \right) \approx 197.9
+            \]
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 id="information-payload-p-">Information Payload (P)</h3>
+    <p>The maximum information payload \(P\) is related to \(I\) and \(Z\). If each configuration \(I\) can be mapped to a set of \(Z\) bits, the payload \(P\) in bits per encoding/decoding cycle is:
+    \[
+    P = \log_2(I) \approx 146.74 \text{ bits (for N = 4)}
+    \]
+    </p>
+
+    <h3 id="minimum-viable-cube-size-equation">Minimum Viable Cube Size Equation</h3>
+    <p>To ensure efficient encoding, the cube size \(N\) must satisfy:
+    \[
+    \frac{2N + \log_2(N!)}{6N^2 - kN} \geq 1
+    \]
+    </p>
+    <p>This inequality can be solved numerically to estimate the minimum viable cube size \(N\).</p>
+
+    <h3 id="conclusion">Conclusion</h3>
+    <p>The theoretical framework and calculations suggest that the approach is potentially viable. For \(N = 4\), the efficiency is approximately 3.49 bits per data slot. Further optimization and testing on larger cube sizes, as well as practical implementation, are necessary to validate and enhance the algorithm’s efficiency and scalability.</p>
+  </div>
+</body>
+</html>
